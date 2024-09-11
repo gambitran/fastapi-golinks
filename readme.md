@@ -7,6 +7,10 @@ Built using FastAPI
 - fastapi
 - uvicorn[standard]
 
+## Development
+
+Run `fastapi dev`
+
 ## TODO
 
 - Turn Dockerfile into multistage build to reduce image size
