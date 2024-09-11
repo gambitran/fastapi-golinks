@@ -1,6 +1,8 @@
 # Golinks API
 
-Built using FastAPI
+For backend of [https://github.com/gambitran/react-ts-golinks](https://github.com/gambitran/react-ts-golinks)
+
+Built using FastAPI.
 
 ## Dependencies
 
