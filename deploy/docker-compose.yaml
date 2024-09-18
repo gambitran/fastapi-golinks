@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:16.4-alpine3.20
+    container_name: postgres-golinks
+    environment:
+      POSTGRES_USER: golinks-admin
+      POSTGRES_PASSWORD: golinks-password
+      POSTGRES_DB: golinks
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d/
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+  # api:

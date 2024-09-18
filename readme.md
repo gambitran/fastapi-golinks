@@ -8,6 +8,8 @@ Built using FastAPI.
 
 - fastapi
 - uvicorn[standard]
+- sqlalchemy
+- asyncpg
 
 ## Development
 
