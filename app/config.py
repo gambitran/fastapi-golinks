@@ -11,7 +11,6 @@ DB_URL = getenv('DB_URL')
 DB_NAME = getenv('DB_NAME')
 
 DATABASE_URL = f'postgresql+asyncpg://{DB_USERNAME}:{DB_PASSWORD}@{DB_URL}/{DB_NAME}'
-print(DATABASE_URL)
 
 engine = create_async_engine(DATABASE_URL, echo=True)
 

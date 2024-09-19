@@ -15,7 +15,12 @@ Built using FastAPI.
 
 Run `fastapi dev`
 
+## Deploy
+
+docker-compose.yaml in deploy for local testing. It will load some initial basic records from init/init.sql.
+
 ## TODO
 
 - Turn Dockerfile into multistage build to reduce image size
 - Implement poetry for dev dependencies
+- Implement authz
