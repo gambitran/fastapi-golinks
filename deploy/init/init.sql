@@ -2,7 +2,7 @@ CREATE TABLE links (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100),
     url VARCHAR(250),
-    description VARCHAR(1000),
+    description VARCHAR(200),
     views NUMERIC
 );
 

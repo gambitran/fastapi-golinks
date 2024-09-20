@@ -12,7 +12,7 @@ class Links(Base):
     id          = Column(Integer, primary_key=True, index=True, autoincrement=True)
     name        = Column(String(100), nullable=False)
     url         = Column(String(250), nullable=False)
-    description = Column(String(1000), nullable=False)
+    description = Column(String(250), nullable=False)
     views       = Column(Integer, nullable=False, default=0)
 
 

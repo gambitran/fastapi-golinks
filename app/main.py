@@ -32,18 +32,37 @@ async def livez():
 
 
 @app.get('/links')
-async def read_links(db: AsyncSession = Depends(get_db)):
+async def get_links(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Links).order_by(asc(Links.name)))
     links = result.scalars().all()
     # Test sleep to show loading
-    # sleep(0.5)
+    # sleep(5)
     return JSONResponse(jsonable_encoder(links))
 
 
-@app.post('/link')
-async def post_link(link: PostLink, db: AsyncSession = Depends(get_db)):
+@app.get('/link')
+async def get_link(name: str = None, id: int = None, db: AsyncSession = Depends(get_db)):
+    if name:
+        query = select(Links).where(Links.name == name)
+        result = await db.execute(query)
+        existing_link = result.scalars().first()
+    elif id:
+        query = select(Links).where(Links.id == id)
+        result = await db.execute(query)
+        existing_link = result.scalars().first()
+    else:
+        raise HTTPException(status_code=404, detail='Error')
 
-    query = select(Links).filter(Links.name == link.name)
+    if not existing_link:
+        raise HTTPException(status_code=404, detail='Link not found')
+
+    return JSONResponse(jsonable_encoder(existing_link))
+
+
+@app.post('/link')
+async def post_link(body: PostLink, db: AsyncSession = Depends(get_db)):
+
+    query = select(Links).where(Links.name == body.name)
     result = await db.execute(query)
     existing_link = result.scalars().first()
 
@@ -51,9 +70,9 @@ async def post_link(link: PostLink, db: AsyncSession = Depends(get_db)):
         raise HTTPException(status_code=400, detail='Name exists')
 
     new_link = Links(
-        name=link.name,
-        url=link.url,
-        description=link.description
+        name=body.name,
+        url=body.url,
+        description=body.description
     )
 
     db.add(new_link)
@@ -69,23 +88,23 @@ async def post_link(link: PostLink, db: AsyncSession = Depends(get_db)):
 
 
 @app.put('/link')
-async def put_link(link: UpdateLink, db: AsyncSession = Depends(get_db)):
+async def put_link(body: UpdateLink, db: AsyncSession = Depends(get_db)):
 
-    query = select(Links).filter(Links.name == link.name)
+    query = select(Links).filter(Links.name == body.name)
     result = await db.execute(query)
     existing_link = result.scalars().first()
 
-    if existing_link and (existing_link.id != link.id):
+    if existing_link and (existing_link.id != body.id):
         raise HTTPException(status_code=400, detail='Name exists')
 
     stmt = (
         update(Links)
-        .where(Links.id == link.id)
+        .where(Links.id == body.id)
         .values(
-            name=link.name,
-            url=link.url,
-            description=link.description,
-            views=link.views
+            name=body.name,
+            url=body.url,
+            description=body.description,
+            views=body.views
         )
         .execution_options(synchronize_session='fetch')
     )
@@ -95,25 +114,25 @@ async def put_link(link: UpdateLink, db: AsyncSession = Depends(get_db)):
 
         if result.rowcount == 0:
             raise HTTPException(status_code=404, detail='Link not found')
-        
+
         await db.commit()
     except SQLAlchemyError as e:
         await db.rollback()
         raise HTTPException(status_code=400, detail=f'Error: {e}')
-    
-    return {'message': f'{link.name} updated'}
+
+    return {'message': f'{body.name} updated'}
 
 
 @app.delete('/link')
-async def delete_link(link: DeleteLink, db: AsyncSession = Depends(get_db)):
+async def delete_link(body: DeleteLink, db: AsyncSession = Depends(get_db)):
     try:
-        stmt = delete(Links).where(Links.id == link.id)
+        stmt = delete(Links).where(Links.id == body.id)
 
         result = await db.execute(stmt)
 
         if result.rowcount == 0:
             raise HTTPException(status_code=404, detail='Link not found')
-        
+
         await db.commit()
     except SQLAlchemyError as e:
         await db.rollback()
