@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: golinks-password
       POSTGRES_DB: golinks
     volumes:
-      - ./init:/docker-entrypoint-initdb.d/
+      - ./deploy/init:/docker-entrypoint-initdb.d/
     ports:
       - "5432:5432"
     restart: unless-stopped
