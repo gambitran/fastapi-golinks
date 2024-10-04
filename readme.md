@@ -6,8 +6,7 @@ Built using FastAPI.
 
 ## Dependencies
 
-- fastapi
-- uvicorn[standard]
+- fastapi[standard]
 - sqlalchemy
 - asyncpg
 
