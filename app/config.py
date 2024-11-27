@@ -2,9 +2,6 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from os import getenv
 
-# # Uncomment if local dev
-# from dotenv import load_dotenv
-# load_dotenv()
 
 DB_USERNAME = getenv('DB_USERNAME')
 DB_PASSWORD = getenv('DB_PASSWORD')

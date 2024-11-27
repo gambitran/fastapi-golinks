@@ -1,7 +1,6 @@
 services:
   db:
     image: postgres:16.4-alpine3.20
-    container_name: postgres-golinks
     environment:
       POSTGRES_USER: golinks-admin
       POSTGRES_PASSWORD: golinks-password
@@ -11,4 +10,14 @@ services:
     ports:
       - "5432:5432"
     restart: unless-stopped
-  # api:
+  api:
+    image: golinks-backend:local
+    environment:
+      ENV: dev
+      DB_USERNAME: golinks-admin
+      DB_PASSWORD: golinks-password
+      DB_NAME: golinks
+      DB_URL: db:5432
+    ports:
+      - "80:8080"
+    restart: unless-stopped

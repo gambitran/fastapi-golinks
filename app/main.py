@@ -7,10 +7,23 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import update, asc, delete
 from .models import Links, PostLink, UpdateLink, DeleteLink
 from .config import AsyncSessionLocal
+from os import getenv
 # from time import sleep
 
 
 app = FastAPI()
+
+if getenv('ENV', 'dev') == 'dev':
+    from fastapi.middleware.cors import CORSMiddleware
+    origins = ["*"]
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 
 async def get_db():
